@@ -1,11 +1,11 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import Landing from './pages/landing'
 import Footer from './components/footer/footer'
+import AppRouter from './router/AppRouter'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <Landing />
+    <AppRouter />
     <Footer />
   </StrictMode>,
 )
