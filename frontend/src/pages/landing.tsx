@@ -1,9 +1,15 @@
 import './landing.css'
 
-function landing() {
+const Landing: React.FC = () => {
   return (
-    <div>landing</div>
+    <div className="landing-container">
+      <div className="landing-content">
+        <div className="text-overlay">
+          <h1>Din receptplanerare online</h1>
+        </div>
+      </div>
+    </div>
   )
 }
 
-export default landing
+export default Landing
