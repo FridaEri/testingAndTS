@@ -1,0 +1,52 @@
+.navbar-container {
+    position: fixed;
+    top:0;
+    left: 0;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-bottom: 2px solid #ddd;
+    padding: 0px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'Arial', sans-serif;
+    z-index: 1000;
+}
+
+.navbar-content {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.navbar-list {
+    display: flex; /* Gör listan horisontell */
+    list-style: none; /* Tar bort punkter */
+    margin: 0; /* Tar bort eventuell marginal */
+    padding: 0; /* Tar bort padding */
+    gap: 20px; /* Mellanrum mellan länkar */
+    margin-left: auto;
+    margin-top: 25px; 
+    margin-right: 60px;
+  }
+
+.navbar-list a {
+    text-decoration: none;
+    color: #fffefe;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.navbar-list a:hover {
+    color: #b16e0f
+}
+
+.navbar-list span {
+    color: #999;
+}
+
+.navbar-brand {
+    font-weight: bold;
+    color: #ce8d00;
+}
