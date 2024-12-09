@@ -1,22 +1,34 @@
-import { Link } from 'react-router-dom'
-import './navbar.css'
+import { Link } from 'react-router-dom';
+import LoginModal from '../loginModal/loginModal'; 
+import './navbar.css';
+import { useState } from 'react';
 
-const Navbar: React.FC = () => 
-    {
-return (
-    <div className="navbar-container">
-        <div className="navbar-content">
-            <div className="navbar-brand">
-                <h2>ReceptPlaneraren</h2>
+const Navbar: React.FC = () => {
+    const [modalOpen, setModalOpen] = useState(false);
+
+    // Open and close modal functions
+    const openModal = () => setModalOpen(true);
+    const closeModal = () => setModalOpen(false); 
+
+    return (
+        <div className="navbar-container">
+            <div className="navbar-content">
+                <div className="navbar-brand">
+                    <h2>RecipePlanner</h2>
+                </div>
+                <div className="navbar-list">
+                    <Link to="/explore">Explore</Link>
+                    <span>|</span>
+                    <button onClick={openModal}>Login</button>
+                    <span>|</span>
+                    <Link to="/signup">Sign up</Link>
+                </div>
             </div>
-            <div className="navbar-list">
-                <Link to="/explore">Utforska</Link>
-                <span>|</span>
-                <span>|</span>
-                <Link to="/signup"> Bli medlem</Link>
-            </div>
+            
+            {/* Pass the isOpen prop and onClose handler */}
+            <LoginModal isOpen={modalOpen} onClose={closeModal} />
         </div>
-    </div>
-)
-}
-export default Navbar
+    );
+};
+
+export default Navbar;

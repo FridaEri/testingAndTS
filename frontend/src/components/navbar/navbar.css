@@ -20,11 +20,11 @@
 }
 
 .navbar-list {
-    display: flex; /* Gör listan horisontell */
-    list-style: none; /* Tar bort punkter */
-    margin: 0; /* Tar bort eventuell marginal */
-    padding: 0; /* Tar bort padding */
-    gap: 20px; /* Mellanrum mellan länkar */
+    display: flex; 
+    list-style: none; 
+    margin: 0; 
+    padding: 0; 
+    gap: 20px; 
     margin-left: auto;
     margin-top: 25px; 
     margin-right: 60px;
@@ -49,4 +49,19 @@
 .navbar-brand {
     font-weight: bold;
     color: #ce8d00;
+}
+
+button {
+    color: white;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: var(--font-size-base);
+    margin-bottom: 25px;
+
+}
+
+button:hover {
+    color: #b16e0f
 }
