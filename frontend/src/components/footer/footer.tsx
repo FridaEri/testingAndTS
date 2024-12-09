@@ -8,19 +8,19 @@ const Footer: React.FC = () => {
       <div className="footer-content">
         {/* Logo or Brand Name */}
         <div className="footer-brand">
-          <h2>ReceptPlaneraren</h2>
-          <p>Din partner för enklare matlagning</p>
+          <h2>RecipePlanner</h2>
+          <p>Your partner for planning delicious meals</p>
         </div>
 
         {/* Contact Section */}
         <div className="footer-contact">
-          <h3>Kontakta oss</h3>
-          <p>Email: support@receptplaneraren.se</p>
+          <h3>Contact</h3>
+          <p>Email: support@recipePlanner.com</p>
         </div>
 
         {/* Social Media Section */}
         <div className="footer-social">
-          <h3>Följ oss:</h3>
+          <h3>Follow us:</h3>
           <div className="social-icons">
             <a
               href="https://facebook.com"
@@ -60,7 +60,7 @@ const Footer: React.FC = () => {
 
       {/* Copyright Section */}
       <div className="footer-bottom">
-        <p>&copy; {new Date().getFullYear()} ReceptPlaneraren. Alla rättigheter förbehållna.</p>
+        <p>&copy; {new Date().getFullYear()} RecipePlanner. All rights reserved</p>
       </div>
     </footer>
   );

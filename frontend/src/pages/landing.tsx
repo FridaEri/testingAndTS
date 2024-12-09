@@ -5,7 +5,7 @@ const Landing: React.FC = () => {
     <div className="landing-container">
       <div className="landing-content">
         <div className="text-overlay">
-          <h1>Din receptplanerare online</h1>
+          <h1>Your recipe planner online</h1>
         </div>
       </div>
     </div>
