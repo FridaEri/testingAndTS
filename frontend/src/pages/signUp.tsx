@@ -26,20 +26,37 @@ const SignUp: React.FC = () => {
         return Object.keys(newErrors).length === 0;
       };
 
-      const handleSubmit = (e: React.FormEvent) => {
+      const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (validate()) {
-            console.log({name, email, address, postalCode, password});
-            alert("Sign-up successful!")
-
-            // clear all fields on form
-            setName('')
-            setEmail('')
-            setAddress('')
-            setPostalCode('')
-            setPassword('')
+            try {
+                const response = await fetch('api/user', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ name, email, address, postalCode, password }),
+                });
+    
+                if (response.ok) {
+                    const result = await response.json();
+                    alert('Sign-up successful!');
+                    console.log(result);
+                    setName('');
+                    setEmail('');
+                    setAddress('');
+                    setPostalCode('');
+                    setPassword('');
+                } else {
+                    const error = await response.json();
+                    alert(error.error);
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Something went wrong. Please try again.');
+            }
         }
-      }
+    };
     
     return (
       <div className="sign-up-container">
