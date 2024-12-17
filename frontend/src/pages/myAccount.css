@@ -1,0 +1,69 @@
+/* Centering the profile section */
+.user-profile {
+    max-width: 600px;
+    margin: 0 auto;
+    margin-top: 100px;
+    margin-bottom: 100px;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .user-profile__heading {
+    text-align: center;
+    font-size: 2rem;
+    color: #d69d0d;
+    margin-bottom: 20px;
+  }
+  
+  /* Form fields */
+  .user-profile__form-field {
+    margin-bottom: 15px;
+  }
+  
+  .user-profile__form-field label {
+    font-size: 1rem;
+    color: #333;
+  }
+  
+  .user-profile__input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+  }
+  
+  /* Buttons */
+  .user-profile__edit-btn,
+  .user-profile__save-btn,
+  .user-profile__cancel-btn {
+    padding: 10px 20px;
+    font-size: 1rem;
+    color: white;
+    background-color: #d69d0d;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  .user-profile__edit-btn:hover,
+  .user-profile__save-btn:hover,
+  .user-profile__cancel-btn:hover {
+    background-color: #8e6d1a;
+    color: white
+  }
+  
+  /* Disabled button */
+  .user-profile__save-btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  
+  /* Adjust layout on mobile */
+  @media (max-width: 768px) {
+    .user-profile {
+      padding: 15px;
+    }
+  }
+  
