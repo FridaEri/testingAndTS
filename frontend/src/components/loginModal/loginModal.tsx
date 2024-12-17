@@ -72,9 +72,11 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
             />
           </div>
           {error && <p className="error-message">{error}</p>} {/* Display error messages */}
-          <button type="submit" className="login-btn">Login</button>
+          <div className="button-container">
+            <button type="submit" className="login-btn">Login</button>
+            <button className="close-btn" onClick={onClose}>Cancel</button>
+          </div>
         </form>
-        <button className="close-btn" onClick={onClose}>Close</button>
       </div>
     </div>
   );
