@@ -124,6 +124,7 @@ app.put('/api/users', async (req: Request, res: Response) => {
   }
 
   try {
+    // Verify token
     const result = await client.query('SELECT user_id FROM tokens WHERE token = $1', [token]);
     const tokenData = result.rows[0];
 
@@ -138,21 +139,29 @@ app.put('/api/users', async (req: Request, res: Response) => {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    const { name, email, address, postalCode, phoneNumber, password } = req.body;
-    const hashedPassword = password ? await bcrypt.hash(password, 10) : user.password;
+    // Get fields from the request body
+    const { name, email, address, postal_code, password } = req.body;
+    let hashedPassword = user.password; // Default to existing password
 
+    // Only hash the new password if it's provided
+    if (password) {
+      hashedPassword = await bcrypt.hash(password, 10);
+    }
+
+    // Perform update
     const updateResult = await client.query(
-      'UPDATE users SET name = $1, email = $2, address = $3, postal_code = $4, phone_number = $5, password = $6 WHERE id = $7 RETURNING *',
-      [name, email, address, postalCode, phoneNumber, hashedPassword, tokenData.user_id]
+      'UPDATE users SET name = $1, email = $2, address = $3, postal_code = $4, password = $5 WHERE id = $6 RETURNING *',
+      [name, email, address, postal_code, hashedPassword, tokenData.user_id]
     );
+
+    if (updateResult.rowCount === 0) {
+      return res.status(400).json({ message: 'No changes made or user not found' });
+    }
 
     const updatedUser = updateResult.rows[0];
 
-    if (updatedUser) {
-      res.status(200).json(updatedUser);
-    } else {
-      res.status(400).json({ message: 'Could not update user profile' });
-    }
+    console.log('Updated user data:', updatedUser); // Debug log
+    res.status(200).json(updatedUser);
   } catch (error) {
     console.error('Error updating user data:', error);
     res.status(500).json({ message: 'Internal server error' });
