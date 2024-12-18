@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import './myAccount.css'
+import './myAccount.css';
+import { useNavigate } from 'react-router-dom';
 
 type UserData = {
   name: string;
@@ -21,6 +22,8 @@ const UserProfile: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [newPassword, setNewPassword] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
+  const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
+  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -43,6 +46,11 @@ const UserProfile: React.FC = () => {
     fetchUserData();
   }, []);
 
+  const handleLogout = () => {
+    localStorage.removeItem('token');  // Remove token from localStorage
+    navigate('/');  // Redirect to login page
+};
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setUserData((prevData) => ({ ...prevData, [name]: value }));
@@ -59,6 +67,12 @@ const UserProfile: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (newPassword !== confirmPassword) {
+      alert('Passwords do not match.');
+      return;
+    }
+
     setIsLoading(true);
     try {
       const token = localStorage.getItem('token');
@@ -88,6 +102,32 @@ const UserProfile: React.FC = () => {
     }
   };
 
+  const handleDelete = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch('/api/users', {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        alert('Profile deleted successfully!');
+        // Additional cleanup or redirect logic here
+      } else {
+        alert('Error deleting profile.');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('An unexpected error occurred. Please try again.');
+    } finally {
+      setShowDeleteModal(false);
+      handleLogout()
+
+    }
+  };
+
   return (
     <div className="user-profile">
       <h1 className="user-profile__heading">My Profile</h1>
@@ -97,7 +137,20 @@ const UserProfile: React.FC = () => {
           <p><strong>Email:</strong> {userData.email}</p>
           <p><strong>Address:</strong> {userData.address}</p>
           <p><strong>Postal Code:</strong> {userData.postal_code}</p>
-          <button className="user-profile__edit-btn" onClick={() => setIsEditing(true)}>Edit</button>
+          <div className="user-profile__buttons">
+            <button
+              className="user-profile__edit-btn"
+              onClick={() => setIsEditing(true)}
+            >
+              Edit
+            </button>
+            <button
+              className="user-profile__delete-btn"
+              onClick={() => setShowDeleteModal(true)}
+            >
+              Delete
+            </button>
+          </div>
         </div>
       ) : (
         <form className="user-profile__form" onSubmit={handleSubmit}>
@@ -141,8 +194,6 @@ const UserProfile: React.FC = () => {
               className="user-profile__input"
             />
           </div>
-          
-          {/* Password Change Fields */}
           <div className="user-profile__form-field">
             <label>New Password:</label>
             <input
@@ -163,12 +214,38 @@ const UserProfile: React.FC = () => {
               className="user-profile__input"
             />
           </div>
-
-          <button className="user-profile__save-btn" type="submit" disabled={isLoading}>
+          <button
+            className="user-profile__save-btn"
+            type="submit"
+            disabled={isLoading}
+          >
             {isLoading ? 'Saving...' : 'Save'}
           </button>
-          <button className="user-profile__cancel-btn" type="button" onClick={() => setIsEditing(false)}>Cancel</button>
+          <button
+            className="user-profile__cancel-btn"
+            type="button"
+            onClick={() => setIsEditing(false)}
+          >
+            Cancel
+          </button>
         </form>
+      )}
+
+      {showDeleteModal && (
+        <div className="modal-overlay-delete">
+          <div className="modal-delete">
+            <p>Are you sure you want to delete your profile?</p>
+            <button className="confirm-btn" onClick={handleDelete}>
+              Yes
+            </button>
+            <button
+              className="cancel-btn"
+              onClick={() => setShowDeleteModal(false)}
+            >
+              No
+            </button>
+          </div>
+        </div>
       )}
     </div>
   );
