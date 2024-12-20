@@ -1,0 +1,142 @@
+/* Detail Card Overlay */
+.detail-card-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6); 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    overflow: hidden; 
+  }
+  
+  /* Detail Card Container */
+  .detail-card {
+    background-color: #fff; 
+    border-radius: 12px;
+    width: 600px; 
+    max-width: 80%; 
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); 
+    animation: fadeIn 0.3s ease-in-out; 
+    max-height: 90vh; 
+    display: flex;
+    flex-direction: column; 
+    overflow: hidden;
+  }
+  
+  /* Fade-in Animation */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  
+  /* Header Section */
+  .detail-card-header {
+    background-color: #d69d0d; 
+    color: #fff;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.2rem;
+    z-index: 2; 
+  }
+  
+  /* Close Button */
+  .detail-card-close {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+  }
+  
+  .detail-card-close:hover {
+    transform: scale(1.2); /* Slight zoom on hover */
+  }
+  
+  /* Image Section */
+  .detail-card-image {
+    width: 100%;
+    max-width: 300px; 
+    height: auto;
+    margin: 0 auto; 
+    display: block;
+  }
+  
+  /* Body Section - Allow scrolling of content */
+  .detail-card-body {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    color: #333;
+    overflow-y: auto; 
+    flex-grow: 1;
+    max-height: calc(80vh - 120px); 
+  }
+  
+  /* Custom Scrollbar Styles */
+  .detail-card-body::-webkit-scrollbar {
+    width: 8px; /* Width of the scrollbar */
+  }
+  
+  .detail-card-body::-webkit-scrollbar-thumb {
+    background-color: #555; 
+    border-radius: 10px; 
+  }
+  
+  .detail-card-body::-webkit-scrollbar-track {
+    background-color: #f1f1f1; 
+    border-radius: 10px; 
+  }
+  
+  .detail-card-body::-webkit-scrollbar-thumb:hover {
+    background-color: #333;
+  }
+  
+  /* Subheading Styling */
+  .detail-card-body h3 {
+    margin-top: 20px;
+    color: #d69d0d; 
+  }
+  
+  /* Ingredient List */
+  .detail-card-body ul {
+    list-style: disc;
+    padding-left: 20px;
+  }
+  
+  .detail-card-body ul li {
+    margin-bottom: 8px;
+  }
+  
+  /* Instructions Paragraph */
+  .detail-card-body p {
+    line-height: 1.6;
+    margin-top: 10px;
+  }
+  
+  /* Media Queries for Smaller Screens */
+  @media (max-width: 768px) {
+    .detail-card {
+      width: 90%;
+    }
+  
+    .detail-card-header {
+      font-size: 1rem;
+      padding: 15px;
+    }
+  
+    .detail-card-body {
+      padding: 15px;
+    }
+  }
