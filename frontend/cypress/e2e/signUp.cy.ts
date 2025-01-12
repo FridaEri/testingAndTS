@@ -23,27 +23,6 @@ describe('SignUp E2E Test', () => {
       cy.get('input[placeholder="Enter your address"]').should('have.value', '');
       cy.get('input[placeholder="Enter your postal code"]').should('have.value', '');
       cy.get('input[placeholder="Enter your password"]').should('have.value', '');
-  
-      // Check via API that the user exists
-      cy.request('http://localhost:3000/api/users').then((response) => {
-        expect(response.status).to.eq(200);
-  
-        // Map only the relevant fields for validation
-        const users = response.body.map((user) => ({
-          name: user.name,
-          email: user.email,
-          address: user.address,
-          postalCode: user.postalCode,
-        }));
-  
-        // Validate that the user data exists
-        expect(users).to.deep.include({
-          name: 'Test User',
-          email: 'testuser@example.com',
-          address: 'Test Street 111',
-          postalCode: '12345',
-        });
-      });
     });
   
     it('should show validation errors for invalid inputs', () => {

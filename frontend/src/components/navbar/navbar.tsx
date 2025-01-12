@@ -27,23 +27,29 @@ const Navbar: React.FC = () => {
                     <h2>RecipePlanner</h2>
                 </div>
                 <div className="navbar-list">
-                    <Link to="/explore">Explore</Link>
-                    <span>|</span>
+
                     
                     {/* Conditional rendering based on whether user is logged in */}
                     {token ? (
                         <>
+                            <Link to="/home">Home</Link>
+                            <span>|</span>
                             <Link to="/my-account">My Account</Link>
                             <span>|</span>
                             <button onClick={handleLogout}>Logout</button>
+                            <span>|</span>
                         </>
                     ) : (
                         <>
+                            <Link to="/">Home</Link>
+                            <span>|</span>
                             <button onClick={openModal}>Login</button>
                             <span>|</span>
                             <Link to="/signup">Sign up</Link>
+                            <span>|</span>
                         </>
                     )}
+                    <Link to="/explore">Explore</Link>
                 </div>
             </div>
             

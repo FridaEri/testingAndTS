@@ -201,6 +201,132 @@ app.delete('/api/users', async (req: Request, res: Response) => {
   }
 });
 
+app.post('/api/meal-plan-items', async (req: Request, res: Response) => {
+  const token = req.headers['authorization']?.split(' ')[1];
+
+  if (!token) {
+    return res.status(401).json({ message: 'Token missing. Please login.' });
+  }
+
+  try {
+    // Verify the token and fetch the user_id
+    const tokenResult = await client.query('SELECT user_id FROM tokens WHERE token = $1', [token]);
+    const tokenData = tokenResult.rows[0];
+    if (!tokenData) {
+      return res.status(401).json({ message: 'Invalid token. Please login.' });
+    }
+
+    const userId = tokenData.user_id;
+
+    // Extract recipe data from the request body
+    const { name, description, ingredients, instructions, dayOfWeek, weekNumber } = req.body;
+
+    if (!name || !ingredients || !instructions || !dayOfWeek || !weekNumber) {
+      return res.status(400).json({ message: 'Missing required fields: name, ingredients, instructions, dayOfWeek, or weekNumber.' });
+    }
+
+    // Insert the recipe into the database
+    const recipeQuery = `
+      INSERT INTO recipes (user_id, name, description, ingredients, instructions)
+      VALUES ($1, $2, $3, $4, $5)
+      RETURNING id;
+    `;
+    const recipeResult = await client.query(recipeQuery, [
+      userId,
+      name,
+      description,
+      JSON.stringify(ingredients),
+      instructions,
+    ]);
+
+    const recipeId = recipeResult.rows[0].id;
+
+    // Ensure the meal plan exists or create it manually
+    const mealPlanQuery = `
+      SELECT id FROM meal_plans
+      WHERE user_id = $1 AND week_number = $2;
+    `;
+    const mealPlanResult = await client.query(mealPlanQuery, [userId, weekNumber]);
+
+    let mealPlanId = mealPlanResult.rows[0]?.id;
+
+    // If no meal plan is found, create one
+    if (!mealPlanId) {
+      const insertMealPlanQuery = `
+        INSERT INTO meal_plans (user_id, week_number)
+        VALUES ($1, $2)
+        RETURNING id;
+      `;
+      const insertMealPlanResult = await client.query(insertMealPlanQuery, [userId, weekNumber]);
+      mealPlanId = insertMealPlanResult.rows[0].id;
+    }
+
+    // Ensure no duplicate recipes for the same day
+    const checkDuplicateQuery = `
+      SELECT 1 FROM meal_plan_items
+      WHERE meal_plan_id = $1 AND day_of_week = $2;
+    `;
+    const duplicateResult = await client.query(checkDuplicateQuery, [mealPlanId, dayOfWeek]);
+
+    if (duplicateResult.rows.length > 0) {
+      return res.status(400).json({ message: 'A recipe is already assigned to this day of the week.' });
+    }
+
+    // Add the recipe to the meal plan
+    const insertMealPlanItemQuery = `
+      INSERT INTO meal_plan_items (meal_plan_id, recipe_id, day_of_week)
+      VALUES ($1, $2, $3);
+    `;
+    await client.query(insertMealPlanItemQuery, [mealPlanId, recipeId, dayOfWeek]);
+
+    res.status(201).json({ message: 'Recipe successfully added to the meal plan.' });
+  } catch (error) {
+    console.error('Error adding recipe to meal plan:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+
+app.get('/api/meal-plans/:weekNumber', async (req: Request, res: Response) => {
+  const { weekNumber } = req.params;
+  const token = req.headers['authorization']?.split(' ')[1];
+
+  if (!token) {
+    return res.status(401).json({ message: 'Unauthorized: Missing token.' });
+  }
+
+  try {
+    const tokenResult = await client.query('SELECT user_id FROM tokens WHERE token = $1', [token]);
+    const tokenData = tokenResult.rows[0];
+
+    if (!tokenData) {
+      return res.status(401).json({ message: 'Invalid token. Please login.' });
+    }
+
+    const userId = tokenData.user_id;
+
+    const query = `
+      SELECT mpi.day_of_week, r.name, r.description, r.ingredients, r.instructions
+      FROM meal_plan_items mpi
+      JOIN meal_plans mp ON mpi.meal_plan_id = mp.id
+      JOIN recipes r ON mpi.recipe_id = r.id
+      WHERE mp.user_id = $1 AND mp.week_number = $2
+      ORDER BY mpi.day_of_week;
+    `;
+
+    const result = await client.query(query, [userId, weekNumber]);
+
+    const mealPlan = result.rows;
+    if (mealPlan.length === 0) {
+      return res.status(404).json({ message: `No meal plan found for week ${weekNumber}.` });
+    }
+
+    res.status(200).json(mealPlan);
+  } catch (error) {
+    console.error('Error fetching meal plan:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
 
 
 app.listen(3000, () => {

@@ -1,0 +1,148 @@
+/* Overlay that covers the entire viewport */
+.recipe-form-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent dark background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Make sure it's on top */
+  overflow: hidden;
+}
+
+/* Recipe form container */
+.recipe-form {
+  background-color: #fff; /* White background */
+  border-radius: 12px;
+  width: 600px;
+  max-width: 80%;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+  animation: fadeIn 0.3s ease-in-out;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 100; /* Ensure form is above overlay */
+}
+
+/* Fade-in animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Header section with the close button */
+.recipe-form-header {
+  background-color: #d69d0d; /* Gold-like color */
+  color: #fff;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.2rem;
+}
+
+/* Close button styles */
+.recipe-form-close {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.recipe-form-close:hover {
+  transform: scale(1.2); /* Slight zoom effect */
+}
+
+/* Form body section */
+.recipe-form-body {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  color: #333;
+  overflow-y: auto;
+  flex-grow: 1;
+  max-height: calc(80vh - 120px); /* Adjust height dynamically */
+}
+
+/* Custom scrollbar styles */
+.recipe-form-body::-webkit-scrollbar {
+  width: 8px;
+}
+
+.recipe-form-body::-webkit-scrollbar-thumb {
+  background-color: #555;
+  border-radius: 10px;
+}
+
+.recipe-form-body::-webkit-scrollbar-track {
+  background-color: #f1f1f1;
+  border-radius: 10px;
+}
+
+.recipe-form-body::-webkit-scrollbar-thumb:hover {
+  background-color: #333;
+}
+
+/* Input, textarea, and select styling */
+.recipe-form-body input,
+.recipe-form-body textarea,
+.recipe-form-body select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+.recipe-form-body input:focus,
+.recipe-form-body textarea:focus,
+.recipe-form-body select:focus {
+  outline: none;
+  border-color: #d69d0d;
+  box-shadow: 0 0 5px rgba(214, 157, 13, 0.5);
+}
+
+/* Submit button styling */
+.recipe-form-body button {
+  padding: 10px 20px;
+  background-color: #d69d0d;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.recipe-form-body button:hover {
+  background-color: #b3820a; /* Darker shade for hover effect */
+}
+
+/* Media Queries for smaller screens */
+@media (max-width: 768px) {
+  .recipe-form {
+    width: 90%;
+  }
+
+  .recipe-form-header {
+    font-size: 1rem;
+    padding: 15px;
+  }
+
+  .recipe-form-body {
+    padding: 15px;
+  }
+}

@@ -1,22 +1,60 @@
 import { mount } from 'cypress/react';
-import LoginModal from '../../src/components/loginModal/loginModal';
+import { MemoryRouter } from 'react-router-dom';
+import Navbar from '../../src/components/navbar/navbar';
 
-describe('Login Modal Component', () => {
-  it('should render the login modal when open and close it when Close is clicked', () => {
-    // A mock function for closeModal
-    const closeModalMock = cy.spy().as('closeModalMock');
+describe('Navbar Component', () => {
+  beforeEach(() => {
+    // Clean localStorage before each test
+    localStorage.clear();
+  });
 
-    // Mount the component
-    mount(<LoginModal isOpen={true} onClose={closeModalMock} />);
+  it('should display links and handle login modal correctly when user is not logged in', () => {
+    // Mount the Navbar inside a MemoryRouter for routing support
+    mount(
+      <MemoryRouter>
+        <Navbar />
+      </MemoryRouter>
+    );
 
-    // Check that the modal is visible
-    cy.get('.modal-content')
-      .should('be.visible');
+    // Verify initial state: Links for unauthenticated users
+    cy.contains('Home').should('exist');
+    cy.contains('Login').should('exist');
+    cy.contains('Sign up').should('exist');
+    cy.contains('Explore').should('exist');
 
-    // Click the Close button
-    cy.contains('Close').click();
+    // Click the Login button to open the modal
+    cy.contains('Login').click();
 
-    // Verify closeModal was called
-    cy.get('@closeModalMock').should('have.been.called');
+    // Verify the modal opens using its class or identifiable element
+    cy.get('.modal-content').should('be.visible');
+
+    // Close the modal (assuming the modal has a button with text "Close")
+    cy.contains('Cancel').click();
+
+    // Verify the modal is no longer visible
+    cy.get('.modal-content').should('not.exist');
+  });
+
+  it('should display the correct links and handle logout when user is logged in', () => {
+    // Simulate a logged-in user by setting a token in localStorage
+    localStorage.setItem('token', 'test-token');
+
+    // Mount the Navbar inside a MemoryRouter
+    mount(
+      <MemoryRouter>
+        <Navbar />
+      </MemoryRouter>
+    );
+
+    // Verify initial state: Links for authenticated users
+    cy.contains('Home').should('exist');
+    cy.contains('My Account').should('exist');
+    cy.contains('Logout').should('exist');
+    cy.contains('Explore').should('exist');
+    cy.contains('Login').should('not.exist'); // Login button should not be visible
+
+    // Click the Logout button
+    cy.contains('Logout').click();
+
   });
 });
