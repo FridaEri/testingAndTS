@@ -10,10 +10,3 @@ Du går sedan till backend och kör npm run dev
 
 För att nå testdelen av projektet öppnar du ännu en terminal och går till frontend mappen, sedan skriver du in npx cypress open. Här väljer du vilken del du vill köra först. Det finns både E2E och komponent tester som man kan göra.
 Viktigt att komma ihåg här är dock att de test som du måste köra först för E2E är signUp för att dom andra testen ska kunna köras då dom är baserade på att man redan har ett konto med informationen som man får ifrån just det testet.
-
-# Vilka krav har uppnåtts? 
-
-Alla krav för G.
-
-Tack för en trevlig kurs!
-God fortsättning och tack för tålamodet. 
